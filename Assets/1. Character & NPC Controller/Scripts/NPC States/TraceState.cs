@@ -3,7 +3,7 @@ using UnityEngine;
 public class TraceState : NPCStateBase
 {
 
-    public TraceState(NPCController2 manager) : base(manager)
+    public TraceState(NPCController manager) : base(manager)
     {
     }
 
@@ -24,11 +24,18 @@ public class TraceState : NPCStateBase
     {
         float distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
 
-        if (distanceToPlayer > aggroRange)
+        if (distanceToPlayer <= npcCtrl.range)
         {
-            npcCtrl.SetState(NPCController2.States.Idle);
+            npcCtrl.SetState(NPCController.States.Attack);
             return;
         }
+
+        if (distanceToPlayer > npcCtrl.aggroRange)
+        {
+            npcCtrl.SetState(NPCController.States.Idle);
+            return;
+        }
+
 
         timer += Time.deltaTime;
         if (timer > traceInterval)

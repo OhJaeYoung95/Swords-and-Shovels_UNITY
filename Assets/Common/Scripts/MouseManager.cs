@@ -37,11 +37,6 @@ public class MouseManager : MonoBehaviour
                 Cursor.SetCursor(doorway, new Vector2(16, 16), CursorMode.Auto);
                 door = true;
             }
-            //else if(hit.collider.gameObject.tag == "Enemy")
-            //{
-            //    Cursor.SetCursor(sword, new Vector2(16, 16), CursorMode.Auto);
-            //    attack = true;
-            //}
             else
             {
                 Cursor.SetCursor(target, new Vector2(16, 16), CursorMode.Auto);

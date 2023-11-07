@@ -10,7 +10,7 @@ public abstract class StateBase
 
 public abstract class NPCStateBase : StateBase
 {
-    protected NPCController2 npcCtrl;
+    protected NPCController npcCtrl;
 
     protected Animator animator; // reference to the animator component
     protected NavMeshAgent agent; // reference to the NavMeshAgent
@@ -19,12 +19,11 @@ public abstract class NPCStateBase : StateBase
     protected Transform player;
     protected float timer = 0f;
 
-    protected float aggroRange = 10; // distance in scene units below which the NPC will increase speed and seek the player
-
+    //protected float aggroRange = 10; // distance in scene units below which the NPC will increase speed and seek the player
     protected float traceInterval = 0.2f;
 
 
-    public NPCStateBase(NPCController2 npcCtrl)
+    public NPCStateBase(NPCController npcCtrl)
     {
         this.npcCtrl = npcCtrl;
 

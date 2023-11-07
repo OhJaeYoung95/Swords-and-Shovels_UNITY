@@ -3,7 +3,7 @@ using UnityEngine;
 public class PatrolState : NPCStateBase
 {
 
-    public PatrolState(NPCController2 manager) : base(manager)
+    public PatrolState(NPCController manager) : base(manager)
     {
     }
 
@@ -26,15 +26,15 @@ public class PatrolState : NPCStateBase
     {
         float distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
 
-        if (distanceToPlayer < aggroRange)
+        if (distanceToPlayer < npcCtrl.aggroRange)
         {
-            npcCtrl.SetState(NPCController2.States.Trace);
+            npcCtrl.SetState(NPCController.States.Trace);
             return;
         }
 
         if (!agent.pathPending && (agent.remainingDistance < agent.stoppingDistance))
         {
-            npcCtrl.SetState(NPCController2.States.Idle);
+            npcCtrl.SetState(NPCController.States.Idle);
             return;
         }
 

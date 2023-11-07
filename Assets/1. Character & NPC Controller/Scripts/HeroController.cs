@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
-public class HeroController : CharacterStats, IAttackable
+public class HeroController : MonoBehaviour, IAttackable
 {
     private Inventory inventory;
     Animator animator; // reference to the animator component
