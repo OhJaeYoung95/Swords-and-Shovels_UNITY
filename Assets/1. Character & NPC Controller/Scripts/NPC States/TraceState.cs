@@ -24,7 +24,7 @@ public class TraceState : NPCStateBase
     {
         float distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
 
-        if (distanceToPlayer <= npcCtrl.range)
+        if (distanceToPlayer <= npcCtrl.CurrentWeapon.range)
         {
             npcCtrl.SetState(NPCController.States.Attack);
             return;

@@ -13,6 +13,7 @@ public class AttackState : NPCStateBase
         timer = npcCtrl.hitInterval;
         agent.speed = agentSpeed;
         agent.isStopped = true;
+        npcCtrl.transform.LookAt(player);
         //animator.SetTrigger("Attack");
     }
 
@@ -29,14 +30,14 @@ public class AttackState : NPCStateBase
         if (timer > npcCtrl.hitInterval)
         {
             timer = 0;
+            npcCtrl.transform.LookAt(player);
             animator.SetTrigger("Attack");
         }
 
-        if (distanceToPlayer > npcCtrl.range)
+        if (distanceToPlayer > npcCtrl.CurrentWeapon.range)
         {
             npcCtrl.SetState(NPCController.States.Trace);
             return;
         }
-
     }
 }

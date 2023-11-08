@@ -11,6 +11,10 @@ public class ScrollingDamageText : MonoBehaviour, IAttackable
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
+        var stats = transform.GetComponent<CharacterStats>();
+        if (!stats.IsLive)
+            return;
+
         var position = transform.position;
         position.y += offsetY;
 

@@ -7,6 +7,7 @@ public class CharacterStats : MonoBehaviour
     public int maxHp;
     public float damage;
     public int armor;
+    public bool IsLive { get; set; } = true;
 
     public int Hp { get; set; }
 

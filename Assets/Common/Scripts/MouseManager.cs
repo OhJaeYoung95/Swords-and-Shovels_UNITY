@@ -11,13 +11,15 @@ public class MouseManager : MonoBehaviour
     public Texture2D sword;
 
     public UnityEvent<Vector3> OnClickEnvironment;
-    //public UnityEvent<CharacterStats> OnClickAttack;
     public UnityEvent<GameObject> OnClickAttackable;
+    public UnityEvent<Skills> OnClickSkill;
 
     public GameObject player;
 
     void Update()
     {
+        if (!player.GetComponent<CharacterStats>().IsLive)
+            return;
         // Raycast into scene
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50, clickableLayer.value))
@@ -63,6 +65,11 @@ public class MouseManager : MonoBehaviour
                     OnClickEnvironment.Invoke(destination);
                 }
             }
+            else if(Input.GetMouseButtonDown(1))
+            {
+                OnClickSkill.Invoke(Skills.Stomp);
+            }
+
         }
         else
         {

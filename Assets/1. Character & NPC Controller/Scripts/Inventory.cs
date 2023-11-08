@@ -3,9 +3,25 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+public enum SkillTypes
+{
+    Closed,
+    Ranged,
+    Area,
+    Count
+}
+
+public enum Skills
+{
+    Stomp,
+    Count,
+}
+
 public class Inventory : MonoBehaviour
 {
     public Weapon[] weapons = new Weapon[3];
+    public Weapon[] skills = new Weapon[3];
     public Transform weaponDummy;
 
     public Weapon CurrentWeapon { get; private set; }
