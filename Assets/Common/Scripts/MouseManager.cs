@@ -13,6 +13,7 @@ public class MouseManager : MonoBehaviour
     public UnityEvent<Vector3> OnClickEnvironment;
     public UnityEvent<GameObject> OnClickAttackable;
     public UnityEvent<Skills> OnClickSkill;
+    public UnityEvent<Vector3> OnRightClickEnvironment;
 
     public GameObject player;
 
@@ -65,9 +66,10 @@ public class MouseManager : MonoBehaviour
                     OnClickEnvironment.Invoke(destination);
                 }
             }
-            else if(Input.GetMouseButtonDown(1))
+            if(Input.GetMouseButtonDown(1))
             {
-                OnClickSkill.Invoke(Skills.Stomp);
+                OnRightClickEnvironment.Invoke(hit.point);
+                //OnClickSkill.Invoke(Skills.Stomp);
             }
 
         }

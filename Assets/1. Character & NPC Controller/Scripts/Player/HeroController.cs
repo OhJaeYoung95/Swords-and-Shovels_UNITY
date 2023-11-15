@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SocialPlatforms;
 
 public class HeroController : MonoBehaviour
 {
+    public AttackDefinition skillAttack;
     private Inventory inventory;
     Animator animator; // reference to the animator component
     NavMeshAgent agent; // reference to the NavMeshAgent
 
     private GameObject attackTarget;
 
-    private Coroutine coMoveAndAttack;
+    private Coroutine coMove;
     private Weapon CurrentSkill { get; set; }
 
     void Awake()
@@ -30,10 +32,10 @@ public class HeroController : MonoBehaviour
 
     public void SetDestination(Vector3 destination)
     {
-        if (coMoveAndAttack != null)
+        if (coMove != null)
         {
-            StopCoroutine(coMoveAndAttack);
-            coMoveAndAttack = null;
+            StopCoroutine(coMove);
+            coMove = null;
         }
 
         attackTarget = null;
@@ -43,14 +45,14 @@ public class HeroController : MonoBehaviour
 
     public void AttackTarget(GameObject target)
     {
-        if (coMoveAndAttack != null)
+        if (coMove != null)
         {
-            StopCoroutine(coMoveAndAttack);
-            coMoveAndAttack = null;
+            StopCoroutine(coMove);
+            coMove = null;
         }
 
         attackTarget = target;
-        coMoveAndAttack = StartCoroutine(CoMoveAndAttack());
+        coMove = StartCoroutine(CoMoveAndAttack());
     }
 
     private IEnumerator CoMoveAndAttack()
@@ -77,6 +79,37 @@ public class HeroController : MonoBehaviour
             transform.LookAt(lookPos);
             animator.SetTrigger("Attack");
         }
+    }
+
+    public void DoSkill(Vector3 destination)
+    {
+        if(coMove != null)
+        {
+            StopCoroutine(coMove);
+            coMove = null;
+        }
+        attackTarget = null;
+        coMove = StartCoroutine(CoMoveAndSkill(destination));
+    }
+
+    private IEnumerator CoMoveAndSkill(Vector3 destination)
+    {
+        agent.isStopped = false;
+        agent.destination = destination;
+
+        while (Vector3.Distance(transform.position, destination) > agent.stoppingDistance)
+        {
+            yield return null;
+        }
+
+        agent.isStopped = true;
+        animator.SetTrigger("Stomp");
+    }
+
+    private void Stomp()
+    {
+        if (skillAttack != null)
+            skillAttack.ExecuteAttack(gameObject, null);
     }
 
     public void Hit()

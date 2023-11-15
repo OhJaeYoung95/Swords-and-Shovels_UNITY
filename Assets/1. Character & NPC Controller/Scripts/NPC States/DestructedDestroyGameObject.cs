@@ -8,7 +8,7 @@ public class DestructedDestroyGameObject : MonoBehaviour, IDestructible
     public void OnDestruction(GameObject attacker)
     {
         CharacterStats stats = transform.GetComponent<CharacterStats>();
-        if(stats.IsLive)
+        if (stats.IsLive)
         {
             stats.IsLive = false;
             var agent = gameObject.GetComponent<NavMeshAgent>();

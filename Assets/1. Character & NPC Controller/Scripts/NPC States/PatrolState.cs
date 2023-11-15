@@ -24,9 +24,7 @@ public class PatrolState : NPCStateBase
 
     public override void Update()
     {
-        float distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
-
-        if (distanceToPlayer < npcCtrl.aggroRange)
+        if (DistanceToPlayer < npcCtrl.aggroRange)
         {
             npcCtrl.SetState(NPCController.States.Trace);
             return;

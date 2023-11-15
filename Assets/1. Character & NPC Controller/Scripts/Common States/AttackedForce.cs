@@ -20,7 +20,6 @@ public class AttackedForce : MonoBehaviour, IAttackable
     {
         if (rigid.transform.CompareTag("Enemy"))
         {
-            Debug.Log(rigid.velocity.magnitude);
         }
     }
 

@@ -22,15 +22,13 @@ public class TraceState : NPCStateBase
 
     public override void Update()
     {
-        float distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
-
-        if (distanceToPlayer <= npcCtrl.CurrentWeapon.range)
+        if (DistanceToPlayer <= npcCtrl.CurrentWeapon.range && !npcCtrl.RaycastToTarget)
         {
             npcCtrl.SetState(NPCController.States.Attack);
             return;
         }
 
-        if (distanceToPlayer > npcCtrl.aggroRange)
+        if (DistanceToPlayer > npcCtrl.aggroRange)
         {
             npcCtrl.SetState(NPCController.States.Idle);
             return;

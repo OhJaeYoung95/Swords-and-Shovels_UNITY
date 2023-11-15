@@ -16,11 +16,24 @@ public abstract class NPCStateBase : StateBase
     protected NavMeshAgent agent; // reference to the NavMeshAgent
 
     protected float agentSpeed, speed;
-    protected Transform player;
+    public Transform player;
     protected float timer = 0f;
 
     //protected float aggroRange = 10; // distance in scene units below which the NPC will increase speed and seek the player
     protected float traceInterval = 0.2f;
+
+    public float DistanceToPlayer
+    {
+        get
+        {
+            if(player == null)
+            {
+                return 0f;
+            }
+            return Vector3.Distance(npcCtrl.transform.position, player.transform.position);
+            //return npcCtrl.agent.remainingDistance;
+        }
+    }
 
 
     public NPCStateBase(NPCController npcCtrl)
@@ -29,7 +42,7 @@ public abstract class NPCStateBase : StateBase
 
         animator = npcCtrl.GetComponent<Animator>();
         agent = npcCtrl.GetComponent<NavMeshAgent>();
-        player = npcCtrl.player;
+        player = npcCtrl.targetTr;
         agentSpeed = agent.speed;
         speed = agentSpeed * 0.5f;
     }

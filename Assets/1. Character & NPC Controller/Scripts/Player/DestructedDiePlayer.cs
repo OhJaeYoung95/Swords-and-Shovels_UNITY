@@ -7,14 +7,14 @@ public class DestructedDiePlayer : MonoBehaviour, IDestructible
 {
     public void OnDestruction(GameObject attacker)
     {
-        CharacterStats stats = transform.GetComponent<CharacterStats>();
-        if (stats.IsLive)
-        {
-            stats.IsLive = false;
-            gameObject.GetComponent<CapsuleCollider>().enabled = false;
-            var anim = gameObject.GetComponent<Animator>();
-            anim.SetTrigger("Death");
-        }
+        //CharacterStats stats = transform.GetComponent<CharacterStats>();
+        //if (stats.IsLive)
+        //{
+        //    stats.IsLive = false;
+        //    gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        //    var anim = gameObject.GetComponent<Animator>();
+        //    anim.SetTrigger("Death");
+        //}
     }
 
     public void Death()

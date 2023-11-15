@@ -11,6 +11,7 @@ public class NPCController : MonoBehaviour, IAttackByHand, IAttackByProjectile
         Patrol,
         Trace,
         Attack,
+        GameOver,
     }
 
     public enum Types
@@ -33,28 +34,75 @@ public class NPCController : MonoBehaviour, IAttackByHand, IAttackByProjectile
     public Transform[] waypoints; // collection of waypoints which define a patrol area
     public int waypointIndex;
 
-    public Transform player; // reference to the player object transform
+    public Transform targetTr; // reference to the player object transform
 
     private Animator animator; // reference to the animator component
-    private NavMeshAgent agent; // reference to the NavMeshAgent
+    public NavMeshAgent agent; // reference to the NavMeshAgent
 
     public float hitInterval = 1f;
 
     public GameObject projectile;
-    public Transform firePos;
     public GameObject attackEffect;
     public ParticleSystem attackParticle;
+
+    public Transform firePos;
 
     public float range = 2f;
 
     public Weapon[] weapons = new Weapon[2];
     public Weapon CurrentWeapon { get; private set; }
 
+    public AttackDefinition attackDef;
+    public bool RaycastToTarget
+    {
+        get
+        {
+            var origin = transform.position;
+            origin.y += 1f;
+
+            var target = targetTr.position;
+            target.y += 1f;
+
+            var direction = target - origin;
+            direction.Normalize();
+
+            //var layer = 0xFFFF ^ LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer));
+            int mask = LayerMask.GetMask(
+                LayerMask.LayerToName(gameObject.layer),
+                LayerMask.LayerToName(targetTr.gameObject.layer));
+            var layer = Physics.AllLayers ^ mask;
+
+            return Physics.Raycast(origin, direction, attackDef.range, layer);
+        }
+    }
+
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindWithTag("Player").transform;
+        targetTr = GameObject.FindWithTag("Player").transform;
+
+        if(targetTr != null)
+        {
+            var playerDieEvent = targetTr.GetComponent<DestucrtedEvents>();
+            if (playerDieEvent != null)
+            {
+                playerDieEvent.OnEvent += OnPlyaerDie;
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (targetTr != null)
+        {
+            var playerDieEvent = targetTr.GetComponent<DestucrtedEvents>();
+            if (playerDieEvent != null)
+            {
+                playerDieEvent.OnEvent -= OnPlyaerDie;
+            }
+        }
     }
 
     // Start is called before the first frame update
@@ -64,12 +112,16 @@ public class NPCController : MonoBehaviour, IAttackByHand, IAttackByProjectile
         states.Add(new PatrolState(this));
         states.Add(new TraceState(this));
         states.Add(new AttackState(this));
+        states.Add(new GameOverState(this));
 
         type = (Types)Random.Range(0, (int)Types.Count);
         CurrentWeapon = weapons[(int)type];
         SetState(States.Idle);
     }
-
+    public void OnPlyaerDie()
+    {
+        SetState(States.GameOver);
+    }
     // Update is called once per frame
     private void Update()
     {
@@ -81,6 +133,8 @@ public class NPCController : MonoBehaviour, IAttackByHand, IAttackByProjectile
     {
         stateManager.ChangeState(states[(int)newState]);
     }
+
+
 
     public void OnAttackByHand(GameObject attacker, GameObject defender)
     {
@@ -119,15 +173,24 @@ public class NPCController : MonoBehaviour, IAttackByHand, IAttackByProjectile
 
     public void Hit()
     {
-        switch(type)
-        {
-            case Types.Normal:
-                OnAttackByHand(gameObject, player.gameObject);
-                break;
-            case Types.Rock_Thrower:
-                OnAttackByProjectile(CurrentWeapon.prefab, player.gameObject);
-                break;
-        }
+        if (targetTr == null)
+            return;
+
+        attackDef.ExecuteAttack(gameObject, targetTr.gameObject);
+        //switch (type)
+        //{
+        //    case Types.Normal:
+        //        OnAttackByHand(gameObject, targetTr.gameObject);
+        //        break;
+        //    case Types.Rock_Thrower:
+        //        OnAttackByProjectile(CurrentWeapon.prefab, targetTr.gameObject);
+        //        break;
+        //}
+
+        //if (CurrentWeapon is Weapon)
+        //{
+
+        //}
     }
     //public void OnAttack(GameObject attacker, Attack attack)
     //{

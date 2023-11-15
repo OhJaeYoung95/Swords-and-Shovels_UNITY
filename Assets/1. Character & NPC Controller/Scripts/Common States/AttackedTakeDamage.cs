@@ -28,7 +28,7 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
                 destructable.OnDestruction(attacker);
             }
         }
-        Debug.Log(stats.Hp);
+        //Debug.Log(stats.Hp);
     }
 
     public void HitNPCEffect()
